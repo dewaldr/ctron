@@ -10,3 +10,8 @@ The ADC is an inexpensive MCP3008 IC, which provides up to 8 analogue channels. 
 
 ## Software
 I used halherta's Mcp3008Spi class, with a minor bugfix, to interface to the MCP3008. The newer RasPi firmware has a reworked SPI kernel module that produced an 'Invalid argument' ioctl error. A simple memset to clear the SPI buffer before populating it fixes this issue.
+
+## ToDo
+ - Convert the Mcp3008 classes to use the wiringPi SPI library
+ - Create a Python version
+ - Integrate with Tornado-based GPIO controller
