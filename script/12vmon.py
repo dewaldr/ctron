@@ -1,6 +1,7 @@
+#!/usr/bin/env python
+
 import wiringpi2
 import struct
-import math
 
 SPI_CHANNEL = 0
 SPI_SPEED   = 1000000
