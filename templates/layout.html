@@ -6,8 +6,8 @@
   <div class="navigation">
   {% if g.user %}
     <a href="{{ url_for('index') }}">home</a> |
-    <a href="{{ url_for('sensor') }}">sensors</a> | 
-    <a href="{{ url_for('relay') }}">relays</a> | 
+    <a href="{{ url_for('sensors') }}">sensors</a> | 
+    <a href="{{ url_for('relays') }}">relays</a> | 
     <a href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a>
   {% else %}
   {# <a href="{{ url_for('index') }}">home</a> | #}

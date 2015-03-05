@@ -40,7 +40,7 @@ def close_connection(exception):
 def before_request():
     g.user = None
     if 'user_id' in session:
-        g.user = query_db('select * from user where user_id = ?', str(session['user_id']), one=True)
+        g.user = query_db('SELECT * FROM user WHERE user_id = ?', str(session['user_id']), one=True)
 
 # Routes
 @app.route('/')
@@ -50,19 +50,38 @@ def index():
     else:
         return render_template('home.html')
 
-@app.route('/sensor')
-def sensor():
+@app.route('/sensors')
+def sensors():
     if not g.user:
         return redirect(url_for('login'))
     else:
-        return render_template('sensor.html', sensors=query_db('select * from sensor'))
+        return render_template('sensors.html', 
+            sensors=query_db('SELECT name FROM sensor WHERE is_active = 1'))
 
-@app.route('/relay')
-def relay():
+@app.route('/sensors/<sensorname>')
+def sensor_detail(sensorname):
     if not g.user:
         return redirect(url_for('login'))
     else:
-        return render_template('relay.html', relays=query_db('select * from relay'))
+        return render_template('sensor_detail.html', 
+                sensor=query_db('SELECT * FROM sensor WHERE is_active = 1 \
+                AND name = ?', [sensorname], one=True))
+
+@app.route('/relays')
+def relays():
+    if not g.user:
+        return redirect(url_for('login'))
+    else:
+        return render_template('relays.html', relays=query_db('SELECT * FROM relay WHERE is_active = 1'))
+
+@app.route('/relays/<relayname>')
+def relay_detail(relayname):
+    if not g.user:
+        return redirect(url_for('login'))
+    else:
+        return render_template('relay_detail.html', 
+                relay=query_db('SELECT * FROM relay WHERE is_active = 1 \
+                AND name = ?', [relayname], one=True))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
