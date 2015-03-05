@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}
+    Sensor detail
+{% endblock %}
+{% block body %}
+  <h2>{{ sensor.name }}</h2>
+  <p>Description: {{ sensor.description }} </p>
+  <p>Read method: {{ sensor.read_method }} </p>
+  <p>Read command: {{ sensor.read_cmd }} </p>
+  <p>Is active: {{ sensor.is_active }} </p>
+{% endblock %}

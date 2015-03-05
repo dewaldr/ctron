@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}
+    Relay detail
+{% endblock %}
+{% block body %}
+  <h2>{{ relay.name }}</h2>
+  <p>Description: {{ relay.description }} </p>
+  <p>Actuate method: {{ relay.actuate_method }} </p>
+  <p>Actuate command: {{ relay.actuate_cmd }} </p>
+  <p>Is active: {{ relay.is_active }} </p>
+{% endblock %}

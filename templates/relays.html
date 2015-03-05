@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}
+cTron Relays
+{% endblock %}
+{% block body %}
+<h2>{{ self.title() }}</h2>
+<ul class="relays">
+    {% for relay in relays %}
+        <li><a class="relay" href="{{ url_for('relay_detail', relayname=relay.name) }}">{{ relay.name }}</a>
+    {% else %}
+        <li><em>There are  no relays configured.</em>
+    {% endfor %}
+</ul>
+{% endblock %}

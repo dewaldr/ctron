@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block title %}
+    cTron Sensors
+{% endblock %}
+{% block body %}
+  <h2>{{ self.title() }}</h2>
+  <ul class="sensors">
+  {% for sensor in sensors %}
+      <li><a class="sensor" href="{{ url_for('sensor_detail', sensorname=sensor.name) }}">{{ sensor.name }}</a>
+  {% else %}
+    <li><em>There are no sensors configured.</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
