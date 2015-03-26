@@ -7,7 +7,7 @@
 
 # build target specs
 CC      = g++
-CCFLAGS = -O2 -Wall
+CCFLAGS = -fpermissive -Wall
 LFLAGS  =
 LIBS    = -lwiringPi
 
