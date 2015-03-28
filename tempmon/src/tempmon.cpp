@@ -13,6 +13,7 @@ using namespace std;
 
 bool _verbose;
 string _device;
+bool _device_isset = false;
 
 void parseOptions(int argc, char** argv);
 
@@ -32,7 +33,14 @@ int main(int argc, char* argv[])
 {
     parseOptions(argc,argv);
 
-    string pattern = "/sys/bus/w1/devices/28-*";
+    string pattern = "/sys/bus/w1/devices/";
+
+    if (_device_isset) {
+        pattern += _device;
+    }
+    else {
+        pattern += "28-*";
+    }
     vector<string> sensors = get_sensors(pattern);
 
     for (vector<string>::iterator it = sensors.begin(); it != sensors.end(); ++it) 
@@ -43,13 +51,13 @@ int main(int argc, char* argv[])
 
         ifstream w1_file;
 
-        string filename;
-        filename += (*it);
-        filename += "/w1_slave";
+        string filepath(*it);
+        string device_name = filepath.substr(filepath.find_last_of("/") + 1);
+        filepath += "/w1_slave";
 
-        if ( _verbose == true ) printf("Opening device file: %s\n", filename.c_str());
+        if ( _verbose == true ) printf("Opening device file: %s\n", filepath.c_str());
 
-        w1_file.open(filename.c_str());
+        w1_file.open(filepath.c_str());
 
         if (w1_file.is_open()) {
     
@@ -63,7 +71,8 @@ int main(int argc, char* argv[])
                     token = line.substr(0, pos);
                     line.erase(0, pos + delimiter.length());
                     float value = roundf(atoi(line.c_str())) / 1000.0;
-                    printf("Temp: %.1f°C\n", value);
+                    if ( _verbose == true ) printf("%s: ", device_name.c_str());
+                    printf("%.1f°C\n", value);
                 }
             }
 
@@ -83,14 +92,14 @@ void parseOptions(int argc, char* argv[])
 {
     try {
         // Define the command line object.
-        CmdLine cmd("Dallas Semiconductor 18B20 temperature sensor", ' ', "0.1");
+        CmdLine cmd("DS 18B20 temperature sensor reader", ' ', "0.1");
 
         // Verbose flag
         SwitchArg verboseArg( "v", "verbose", "Print additional information", false );
         cmd.add( verboseArg );
 
-        // Verbose flag
-        ValueArg<string>  deviceArg("d","device","Device ID to read",true, "28-xxxxx", "Device");
+        // Device string
+        ValueArg<string>  deviceArg("d","device","Device ID to read", false, "", "device-id");
         cmd.add( deviceArg );
 
         // Parse the args.
@@ -98,6 +107,8 @@ void parseOptions(int argc, char* argv[])
 
         // Get the value parsed by each arg.
         _verbose = verboseArg.getValue();
+        _device_isset = deviceArg.isSet();
+        _device = deviceArg.getValue();
 
     }
     catch ( ArgException& e) {
